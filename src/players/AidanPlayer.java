@@ -1,23 +1,31 @@
 package players;
 
+import game.HandRanks;
 import game.Player;
 
-public class AdamsPlayer extends Player {
-    public AdamsPlayer(String name) {
+public class AidanPlayer extends Player {
+
+    boolean hasDecentHand;
+    public AidanPlayer(String name) {
         super(name);
     }
+
+
 
     @Override
     protected void takePlayerTurn() {
         if(getGameState().isActiveBet()) {
             if(getGameState().getNumRoundStage() == 0) {
-                // i know there is a bet pre flop
+                // i know there is a bet pre-flop
             }
         }
     }
 
     @Override
     protected boolean shouldFold() {
+        if((hasDecentHand = evaluatePlayerHand().getValue() <= HandRanks.PAIR.getValue() && (getGameState().getNumRoundStage() == 2))) {
+            return true;
+        }
         return false;
     }
 
@@ -33,7 +41,12 @@ public class AdamsPlayer extends Player {
 
     @Override
     protected boolean shouldRaise() {
-        return false;
+        if(hasDecentHand = evaluatePlayerHand().getValue() >= HandRanks.TWO_PAIR.getValue()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
